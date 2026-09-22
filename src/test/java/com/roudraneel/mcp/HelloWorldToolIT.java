@@ -37,7 +37,13 @@ class HelloWorldToolIT {
                     new McpSchema.CallToolRequest("hello_world", Map.of("name", "Copilot")));
             assertThat(result.isError()).isFalse();
             assertThat(((McpSchema.TextContent) result.content().get(0)).text())
-                    .contains("Hello, Copilot!");
+                    .isEqualTo("Hello, Copilot! Greetings from the Spring AI MCP server.");
+
+            McpSchema.CallToolResult noArgs = client.callTool(
+                    new McpSchema.CallToolRequest("hello_world", (Map<String, Object>) null));
+            assertThat(noArgs.isError()).isFalse();
+            assertThat(((McpSchema.TextContent) noArgs.content().get(0)).text())
+                    .startsWith("Hello, World!");
         }
     }
 }

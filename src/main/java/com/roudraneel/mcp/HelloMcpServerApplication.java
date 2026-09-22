@@ -1,5 +1,8 @@
 package com.roudraneel.mcp;
 
+import java.util.Arrays;
+
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
@@ -19,8 +22,12 @@ public class HelloMcpServerApplication {
      */
     @Bean
     ToolCallbackProvider helloTools(HelloWorldTools helloWorldTools) {
-        return MethodToolCallbackProvider.builder()
+        ToolCallback[] callbacks = MethodToolCallbackProvider.builder()
                 .toolObjects(helloWorldTools)
-                .build();
+                .build()
+                .getToolCallbacks();
+        return ToolCallbackProvider.from(Arrays.stream(callbacks)
+                .map(NullSafeToolCallback::new)
+                .toArray(ToolCallback[]::new));
     }
 }
