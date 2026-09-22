@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: hello-mcp-server
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: hello-mcp-server
+        version: 0.0.1
+        # STREAMABLE = MCP "Streamable HTTP" transport (single /mcp endpoint, POST + optional GET SSE stream).
+        # Alternatives: SSE (legacy HTTP+SSE), STDIO.
+        protocol: STREAMABLE
+        # SYNC is fine for a WebMVC (servlet) server; ASYNC is for WebFlux.
+        type: SYNC
+        # Path GitHub Copilot connects to: http://localhost:8080/mcp
+        streamable-http:
+          mcp-endpoint: /mcp
+          keep-alive-interval: 30s
+        capabilities:
+          tool: true
+          resource: false
+          prompt: false
+          completion: false
+
+logging:
+  level:
+    io.modelcontextprotocol: DEBUG
+    org.springframework.ai.mcp: DEBUG
